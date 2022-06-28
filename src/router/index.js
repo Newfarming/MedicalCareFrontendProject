@@ -31,53 +31,53 @@ import Layout from '@/layout'
  * all roles can be accessed
  */
 export const constantRoutes = [
-  // {
-  //   path: '/activity',
-  //   component: Layout,
-  //   redirect: '/activity/activity-list',
-  //   name: 'activity',
-  //   meta: {
-  //     title: '活动',
-  //     icon: 'table'
-  //   },
-  //   children: [
-  //     {
-  //       path: 'activity-list',
-  //       component: () => import('@/views/activity/activity-list'),
-  //       name: 'activityList',
-  //       meta: { title: '活动列表' }
-  //     },
-  //     {
-  //       path: 'activity-edit/:id',
-  //       component: () => import('@/views/activity/activity-edit'),
-  //       name: 'activityEdit',
-  //       meta: { title: '活动编辑', keepAlive: false },
-  //       hidden: true
-  //     },
-  //     {
-  //       path: 'activity-add',
-  //       component: () => import('@/views/activity/activity-add'),
-  //       name: 'activityAdd',
-  //       meta: { title: '活动添加', keepAlive: false },
-  //       hidden: true
-  //     },
-  //     {
-  //       path: 'activity-details/:id',
-  //       component: () => import('@/views/activity/activity-details'),
-  //       name: 'activityDetails',
-  //       meta: { title: '活动详情', keepAlive: false },
-  //       hidden: true
-  //     },
-  //     {
-  //       path: 'scanCodePage/:id',
-  //       component: () => import('@/views/activity/scanCodePage'),
-  //       name: 'ScanCodePage',
-  //       meta: { title: '二维码扫码', keepAlive: false },
-  //       hidden: true
-  //     }
-  //
-  //   ]
-  // },
+  {
+    path: '/activity',
+    component: Layout,
+    redirect: '/activity/activity-list',
+    name: 'activity',
+    meta: {
+      title: '活动',
+      icon: 'table'
+    },
+    children: [
+      {
+        path: 'activity-list',
+        component: () => import('@/views/activity/activity-list'),
+        name: 'activityList',
+        meta: { title: '活动列表' }
+      },
+      {
+        path: 'activity-edit/:id',
+        component: () => import('@/views/activity/activity-edit'),
+        name: 'activityEdit',
+        meta: { title: '活动编辑', keepAlive: false },
+        hidden: true
+      },
+      {
+        path: 'activity-add',
+        component: () => import('@/views/activity/activity-add'),
+        name: 'activityAdd',
+        meta: { title: '活动添加', keepAlive: false },
+        hidden: true
+      },
+      {
+        path: 'activity-details/:id',
+        component: () => import('@/views/activity/activity-details'),
+        name: 'activityDetails',
+        meta: { title: '活动详情', keepAlive: false },
+        hidden: true
+      },
+      {
+        path: 'scanCodePage/:id',
+        component: () => import('@/views/activity/scanCodePage'),
+        name: 'ScanCodePage',
+        meta: { title: '二维码扫码', keepAlive: false },
+        hidden: true
+      }
+
+    ]
+  },
   {
     path: '/user',
     component: Layout,
