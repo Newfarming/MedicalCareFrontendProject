@@ -5,7 +5,7 @@
       <el-select v-model="listQuery.type" placeholder="搜索类型" clearable class="filter-item" style="width: 120px;margin-right: 10px;">
         <el-option v-for="item in TypeOptions" :key="item.key" :label="item.display_name" :value="item.key" />
       </el-select>
-      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+      <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         搜索人员
       </el-button>
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleJumpAdd">
@@ -17,6 +17,7 @@
       :key="tableKey"
       v-loading="listLoading"
       :data="list"
+      :depart = "depart"
       border
       fit
       highlight-current-row
@@ -40,7 +41,7 @@
       </el-table-column>
       <el-table-column label="手机号" min-width="150px">
         <template slot-scope="{row}">
-          <span class="link-type" @click="handleJumpDetails(row)">{{ row.fields.phone  }}</span>
+          <span class="link-type" @click="handleJumpDetails(row)">{{ row.fields.phone }}</span>
           <!--          <el-tag>{{ row.type | typeFilter }}</el-tag>-->
         </template>
       </el-table-column>
@@ -71,6 +72,7 @@
 
 <script>
 import { getUserList, getDepartList } from '@/api/table'
+import { userDelete } from '@/api/user'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 const TypeOptions = [
@@ -94,7 +96,7 @@ export default {
   },
   data() {
     return {
-      total:0,
+      total: 0,
       tableKey: 0,
       list: null,
       depart: null,
@@ -137,14 +139,22 @@ export default {
       })
     },
     handleJumpDetails(row) {
-      this.$router.push('/user/user-details/' + row.id)
+      this.$router.push('/user/user-details/' + row.pk)
     },
     handleJumpEdit(row) {
       console.log('row:' + JSON.stringify(row))
-      this.$router.push('/user/user-edit/' + row.id)
+      this.$router.push('/user/user-edit/' + row.pk)
     },
     handleJumpAdd() {
       this.$router.push('/user/user-add')
+    },
+    handleDelete(row) {
+      userDelete({
+        id: row.pk
+      }).then(response => {
+        this.fetchData()
+        // this.listLoading = false
+      })
     },
     handleFilter() {
       // this.listQuery.page = 1

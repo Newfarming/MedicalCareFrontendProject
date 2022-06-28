@@ -117,45 +117,45 @@ export const constantRoutes = [
       }
     ]
   },
-  // {
-  //   path: '/department',
-  //   component: Layout,
-  //   redirect: '/department/department-list',
-  //   name: 'department',
-  //   meta: {
-  //     title: '部门',
-  //     icon: 'tree'
-  //   },
-  //   children: [
-  //     {
-  //       path: 'department-list',
-  //       component: () => import('@/views/department/department-list'),
-  //       name: 'departmentList',
-  //       meta: { title: '部门列表' }
-  //     },
-  //     {
-  //       path: 'department-edit/:id',
-  //       component: () => import('@/views/department/department-edit'),
-  //       name: 'departmentEdit',
-  //       meta: { title: '部门编辑', keepAlive: false },
-  //       hidden: true
-  //     },
-  //     {
-  //       path: 'department-add',
-  //       component: () => import('@/views/department/department-add'),
-  //       name: 'departmentAdd',
-  //       meta: { title: '部门添加', keepAlive: false },
-  //       hidden: true
-  //     },
-  //     {
-  //       path: 'department-details/:id',
-  //       component: () => import('@/views/department/department-details'),
-  //       name: 'departmentDetails',
-  //       meta: { title: '部门详情', keepAlive: false },
-  //       hidden: true
-  //     }
-  //   ]
-  // },
+  {
+    path: '/department',
+    component: Layout,
+    redirect: '/department/department-list',
+    name: 'department',
+    meta: {
+      title: '部门',
+      icon: 'tree'
+    },
+    children: [
+      {
+        path: 'department-list',
+        component: () => import('@/views/department/department-list'),
+        name: 'departmentList',
+        meta: { title: '部门列表' }
+      },
+      {
+        path: 'department-edit/:id',
+        component: () => import('@/views/department/department-edit'),
+        name: 'departmentEdit',
+        meta: { title: '部门编辑', keepAlive: false },
+        hidden: true
+      },
+      {
+        path: 'department-add',
+        component: () => import('@/views/department/department-add'),
+        name: 'departmentAdd',
+        meta: { title: '部门添加', keepAlive: false },
+        hidden: true
+      },
+      {
+        path: 'department-details/:id',
+        component: () => import('@/views/department/department-details'),
+        name: 'departmentDetails',
+        meta: { title: '部门详情', keepAlive: false },
+        hidden: true
+      }
+    ]
+  },
   {
     path: '/login',
     component: () => import('@/views/login/index'),
