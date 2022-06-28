@@ -1,34 +1,36 @@
 <template>
   <div class="m-activity_details">
-    <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="100px">
-      <el-form-item label="姓名:" class="el_form">
-        <div>{{temp.name}}</div>
+    <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="80px">
+      <el-form-item label="活动名称:" class="el_form">
+        <div>{{ temp.name }}</div>
       </el-form-item>
-      <el-form-item label="账号:" class="el_form">
-        <div>{{temp.username}}</div>
+      <el-form-item label="日期:" class="el_form">
+        <div>{{ temp.start_time }}</div>
       </el-form-item>
-      <el-form-item label="手机号:" class="el_form">
-        <div>{{temp.phone}}</div>
+      <el-form-item label="地点:" class="el_form">
+        <div>{{ temp.place }}</div>
       </el-form-item>
-      <el-form-item label="工号:" class="el_form">
-        <div>{{temp.workNo}}</div>
+      <el-form-item label="持续时间:" class="el_form">
+        <div>{{temp.lasting_time}}天</div>
       </el-form-item>
-      <el-form-item label="身份证:" class="el_form">
-        <div>{{temp.identityCard}}</div>
+      <el-form-item label="活动积分:" class="el_form">
+        <div>{{temp.score}}</div>
       </el-form-item>
-      <el-form-item label="部门:" class="el_form">
-        <div>{{temp.depart_id}}</div>
+      <el-form-item label="活动状态:" class="el_form">
+        <el-tag :type="temp.activity_status | statusFilter">
+            {{ temp.activity_status | statusNameFilter }}
+          </el-tag>
       </el-form-item>
-      <div style="text-align: center;">
-        <el-button type="primary" style="margin-right: 40px;min-width: 120px;" @click="handleJumpLists">确定</el-button>
-        <el-button type="info" style="min-width: 120px;" @click="handleJumpLists">取消</el-button>
-      </div>
+      <el-form-item label="扫码签到:" class="el_form">
+        <el-button @click="scanCode">开始扫码</el-button>
+      </el-form-item>
     </el-form>
+
   </div>
 </template>
 <script>
-import { getDepartList } from '@/api/table'
-import { userAdd, getUserDetails } from '@/api/user'
+import { getActivityDetails } from '@/api/table'
+// import { userAdd, getUserDetails } from '@/api/user'
 
 const activityStatusOptions = [
   { key: 'processing', display_name: '进行中' },
@@ -52,11 +54,19 @@ export default {
   filters: {
     statusFilter(status) {
       const statusMap = {
-        published: 'success',
-        draft: 'gray',
-        deleted: 'danger'
+        0: 'gray',
+        1: 'success',
+        2: 'danger'
       }
       return statusMap[status]
+    },
+    statusNameFilter(status) {
+      const statusNameMap = {
+        0: '未开始',
+        1: '进行中',
+        2: '已结束'
+      }
+      return statusNameMap[status]
     }
   },
   data() {
@@ -98,30 +108,26 @@ export default {
     this.fetchData()
   },
   methods: {
+    scanCode() {
+      console.log('浏览器信息', navigator.userAgent)
+      this.$router.push({
+        path: '/activity/scanCodePage/' + this.$route.params.id
+      })
+    },
     fetchData() {
       console.log('this.$route.params', this.$route.params)
       this.listLoading = true
-      getDepartList({
-        search: '',
-        search_type: 'title',
-        pageStart: 0,
-        pagesize: 100
-      }).then(response => {
-        this.depart = response.data
-        console.log('getDepartList response', response)
-        this.listLoading = false
-      })
-      getUserDetails({
+      getActivityDetails({
         id: this.$route.params.id
       }).then(response => {
-        console.log('user details info response', response)
-        this.temp.identityCard = response.data.identityCard
-        this.temp.username = response.data.username
-        this.temp.name = response.data.name
-        this.temp.workNo = response.data.workNo
-        this.temp.phone = response.data.phone
-        this.temp.depart_id = response.data.depart_id
+        console.log('getActivityDetails response', response)
+        this.temp.activity_status = response.data.activity_status
         this.temp.id = response.data.id
+        this.temp.name = response.data.name
+        this.temp.lasting_time = response.data.lasting_time
+        this.temp.score = response.data.score
+        this.temp.place = response.data.place
+        this.temp.start_time = response.data.start_time
       })
     },
     userAdd() {

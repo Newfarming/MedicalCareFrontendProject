@@ -1,39 +1,28 @@
 <template>
   <div class="m-activity_details">
     <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="100px">
-      <el-form-item label="姓名:" class="el_form">
+      <el-form-item label="活动名称:" class="el_form">
         <el-input v-model="temp.name" />
       </el-form-item>
-      <el-form-item label="账号:" class="el_form">
-        <el-input v-model="temp.username" />
+      <el-form-item label="活动地点:" class="el_form">
+        <el-input v-model="temp.place" />
       </el-form-item>
-      <el-form-item label="手机号:" class="el_form">
-        <el-input v-model="temp.phone" />
+      <el-form-item label="活动开始时间:" class="el_form">
+        <el-date-picker v-model="temp.start_time" type="datetime" format="yyyy年MM月dd日" value-format="yyyy-MM-dd" placeholder="请选择活动开始日期" />
       </el-form-item>
-      <el-form-item label="工号:" class="el_form">
-        <el-input v-model="temp.workNo" />
+      <el-form-item label="活动持续天数:" class="el_form">
+        <el-input v-model="temp.lasting_time" />
       </el-form-item>
-      <el-form-item label="身份证:" class="el_form">
-        <el-input v-model="temp.identityCard" />
+      <el-form-item label="活动积分:" class="el_form">
+        <el-input v-model="temp.score" />
       </el-form-item>
-      <el-form-item label="部门:" class="el_form">
-        <el-select v-model="temp.depart_id" placeholder="部门" clearable class="filter-item" style="width: 120px;margin-right: 10px;">
-          <el-option v-for="item in depart" :key="item.pk" :label="item.fields.title" :value="item.pk" />
-        </el-select>
+      <el-form-item label="活动状态:" class="el_form">
+        <el-select v-model="temp.activity_status" class="filter-item" placeholder="Please select">
+            <el-option v-for="item in activityStatusOptions" :key="item.key" :label="item.display_name" :value="item.key" />
+          </el-select>
       </el-form-item>
-      <el-form-item label="密码:" class="el_form">
-        <el-input v-model="temp.password" />
-      </el-form-item>
-      <!--      <el-form-item label="确认密码:" class="el_form">-->
-      <!--        <el-input  />-->
-      <!--      </el-form-item>-->
-      <!--      <el-form-item label="权限:" class="el_form">-->
-      <!--        <el-select  placeholder="权限类型" clearable class="filter-item" style="width: 120px;margin-right: 10px;">-->
-      <!--          <el-option v-for="item in TypeOptions" :key="item.key" :label="item.display_name" :value="item.key" />-->
-      <!--        </el-select>-->
-      <!--      </el-form-item>-->
       <div style="text-align: center;">
-        <el-button type="primary" style="margin-right: 40px;min-width: 120px;" @click="handleAddUser">确定</el-button>
+        <el-button type="primary" style="margin-right: 40px;min-width: 120px;" @click="handleAddActivity">确定</el-button>
         <el-button type="info" style="min-width: 120px;" @click="handleJumpLists">取消</el-button>
       </div>
     </el-form>
@@ -41,13 +30,12 @@
   </div>
 </template>
 <script>
-import { getDepartList } from '@/api/table'
-import { userAdd } from '@/api/user'
+import { activityAdd } from '@/api/table'
 
 const activityStatusOptions = [
-  { key: 'processing', display_name: '进行中' },
-  { key: 'nostart', display_name: '未开始' },
-  { key: 'ended', display_name: '已结束' }
+  { key: '0', display_name: '未开始' },
+  { key: '1', display_name: '进行中' },
+  { key: '2', display_name: '已结束' }
 ]
 const TypeOptions = [
   { key: '1', display_name: '普通权限' },
@@ -84,13 +72,12 @@ export default {
         title: [{ required: true, message: 'title is required', trigger: 'blur' }]
       },
       temp: {
-        username: '',
         name: '',
-        password: '',
-        depart_id: '',
-        phone: '',
-        workNo: '',
-        identityCard: ''
+        start_time: '',
+        lasting_time: '',
+        place: '',
+        score: '',
+        activity_status: ''
       },
       total: 0,
       tableKey: 0,
@@ -112,20 +99,20 @@ export default {
   },
   methods: {
     fetchData() {
-      this.listLoading = true
-      getDepartList({
-        search: '',
-        // search_type: 'title',
-        pageStart: 0,
-        pagesize: 100
-      }).then(response => {
-        this.depart = response.data
-        console.log('response', response)
-        this.listLoading = false
-      })
+      // this.listLoading = true
+      // getDepartList({
+      //   search: '',
+      //   // search_type: 'title',
+      //   pageStart: 0,
+      //   pagesize: 100
+      // }).then(response => {
+      //   this.depart = response.data
+      //   console.log('response', response)
+      //   this.listLoading = false
+      // })
     },
-    userAdd() {
-      userAdd(this.temp).then(response => {
+    activityAdd() {
+      activityAdd(this.temp).then(response => {
         if (response.data === 'success') {
           this.$router.push('/user/user-list/')
         }
@@ -134,8 +121,8 @@ export default {
     handleJumpLists() {
       this.$router.push('/user/user-list/')
     },
-    handleAddUser() {
-      this.userAdd()
+    handleAddActivity() {
+      this.activityAdd()
     }
   }
 }

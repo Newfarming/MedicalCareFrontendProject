@@ -5,7 +5,7 @@
       <el-select v-model="listQuery.type" placeholder="搜索类型" clearable class="filter-item" style="width: 120px;margin-right: 10px;">
         <el-option v-for="item in TypeOptions" :key="item.key" :label="item.display_name" :value="item.key" />
       </el-select>
-      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+      <el-button  class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         搜索活动
       </el-button>
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleJumpAdd">
@@ -28,24 +28,24 @@
     >
       <el-table-column label="ID" prop="id" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
-          <span>{{ row.id }}</span>
+          <span>{{ row.pk }}</span>
         </template>
       </el-table-column>
       <el-table-column label="活动标题" min-width="150px">
         <template slot-scope="{row}">
-          <span class="link-type" @click="handleJumpDetails(row)">{{ row.title }}</span>
+          <span class="link-type" @click="handleJumpDetails(row)">{{ row.fields.name }}</span>
 <!--          <el-tag>{{ row.type | typeFilter }}</el-tag>-->
         </template>
       </el-table-column>
       <el-table-column label="创建日期" width="150px" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.timestamp | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+          <span>{{ row.fields.start_time }}</span>
         </template>
       </el-table-column>
       <el-table-column label="活动状态" class-name="status-col" width="100">
         <template slot-scope="{row}">
-          <el-tag :type="row.status | statusFilter">
-            {{ row.status }}
+          <el-tag :type="row.fields.activity_status | statusFilter">
+            {{ row.fields.activity_status | statusNameFilter }}
           </el-tag>
         </template>
       </el-table-column>
@@ -64,55 +64,12 @@
       </el-table-column>
     </el-table>
 
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
-
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px" style="width: 400px; margin-left:50px;">
-        <el-form-item label="Type" prop="type">
-          <el-select v-model="temp.type" class="filter-item" placeholder="Please select">
-            <el-option v-for="item in calendarTypeOptions" :key="item.key" :label="item.display_name" :value="item.key" />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="Date" prop="timestamp">
-          <el-date-picker v-model="temp.timestamp" type="datetime" placeholder="Please pick a date" />
-        </el-form-item>
-        <el-form-item label="Title" prop="title">
-          <el-input v-model="temp.title" />
-        </el-form-item>
-        <el-form-item label="Status">
-          <el-select v-model="temp.status" class="filter-item" placeholder="Please select">
-            <el-option v-for="item in statusOptions" :key="item" :label="item" :value="item" />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="Remark">
-          <el-input v-model="temp.remark" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="Please input" />
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">
-          Cancel
-        </el-button>
-        <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">
-          Confirm
-        </el-button>
-      </div>
-    </el-dialog>
-
-    <el-dialog :visible.sync="dialogPvVisible" title="Reading statistics">
-      <el-table :data="pvData" border fit highlight-current-row style="width: 100%">
-        <el-table-column prop="key" label="Channel" />
-        <el-table-column prop="pv" label="Pv" />
-      </el-table>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="dialogPvVisible = false">Confirm</el-button>
-      </span>
-    </el-dialog>
+    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="fetchData" />
   </div>
 </template>
 
 <script>
-import { getUserList, getDepartList } from '@/api/table'
-import { userDelete } from '@/api/user'
+import { getActivityList, activityDelete } from '@/api/table'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 const TypeOptions = [
@@ -127,11 +84,19 @@ export default {
   filters: {
     statusFilter(status) {
       const statusMap = {
-        published: 'success',
-        draft: 'gray',
-        deleted: 'danger'
+        0: 'gray',
+        1: 'success',
+        2: 'danger'
       }
       return statusMap[status]
+    },
+    statusNameFilter(status) {
+      const statusNameMap = {
+        0: '未开始',
+        1: '进行中',
+        2: '已结束'
+      }
+      return statusNameMap[status]
     }
   },
   data() {
@@ -158,38 +123,29 @@ export default {
   methods: {
     fetchData() {
       this.listLoading = true
-      getDepartList({
+      getActivityList({
         search: '',
-        search_type: 'title',
-        pageStart: 0,
-        pagesize: 100
-      }).then(response => {
-        this.depart = response.data
-        this.listLoading = false
-      })
-      getUserList({
-        search: '',
-        // search_type: 'username',
+        search_type: 'name',
         pageStart: 0,
         pagesize: 10
       }).then(response => {
+        console.log('getActivityList',getActivityList)
         this.list = response.data
         this.listLoading = false
         this.total = 100
       })
     },
     handleJumpDetails(row) {
-      this.$router.push('/user/user-details/' + row.pk)
+      this.$router.push('/activity/activity-details/' + row.pk)
     },
     handleJumpEdit(row) {
-      console.log('row:' + JSON.stringify(row))
-      this.$router.push('/user/user-edit/' + row.pk)
+      this.$router.push('/activity/activity-edit/' + row.pk)
     },
     handleJumpAdd() {
-      this.$router.push('/user/user-add')
+      this.$router.push('/activity/activity-add')
     },
     handleDelete(row) {
-      userDelete({
+      activityDelete({
         id: row.pk
       }).then(response => {
         this.fetchData()

@@ -1,5 +1,4 @@
 import request from '@/utils/request'
-import {userDelete} from "@/api/user";
 
 export function getUserList(params) {
   return request({
@@ -40,6 +39,42 @@ export function departEdit(params) {
 export function departAdd(params) {
   return request({
     url: '/depart/add',
+    method: 'get',
+    params
+  })
+}
+
+export function getActivityList(params) {
+  return request({
+    url: '/activity/list',
+    method: 'get',
+    params
+  })
+}
+export function getActivityDetails(params) {
+  return request({
+    url: '/activity/details',
+    method: 'get',
+    params
+  })
+}
+export function activityDelete(params) {
+  return request({
+    url: '/activity/delete',
+    method: 'get',
+    params
+  })
+}
+export function activityEdit(params) {
+  return request({
+    url: '/activity/edit',
+    method: 'get',
+    params
+  })
+}
+export function activityAdd(params) {
+  return request({
+    url: '/activity/add',
     method: 'get',
     params
   })

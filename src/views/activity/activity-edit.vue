@@ -5,7 +5,7 @@
         <el-input v-model="temp.title" />
       </el-form-item>
       <el-form-item label="日期:" class="el_form">
-        <el-date-picker v-model="temp.timestamp" type="datetime" placeholder="Please pick a date" />
+        <el-date-picker v-model="temp.start_time" type="datetime" placeholder="Please pick a date" />
       </el-form-item>
       <el-form-item label="地点:" class="el_form">
         <el-input v-model="temp.place" />
@@ -14,7 +14,7 @@
         <el-input v-model="temp.last_time" />
       </el-form-item>
       <el-form-item label="活动状态:" class="el_form">
-        <el-select v-model="temp.type" class="filter-item" placeholder="Please select">
+        <el-select v-model="temp.activity_status" class="filter-item" placeholder="Please select">
             <el-option v-for="item in activityStatusOptions" :key="item.key" :label="item.display_name" :value="item.key" />
           </el-select>
       </el-form-item>
@@ -33,9 +33,9 @@ import { getDepartList } from '@/api/table'
 import { userEdit, getUserDetails } from '@/api/user'
 
 const activityStatusOptions = [
-  { key: 'processing', display_name: '进行中' },
-  { key: 'nostart', display_name: '未开始' },
-  { key: 'ended', display_name: '已结束' }
+  { key: '0', display_name: '未开始' },
+  { key: '1', display_name: '进行中' },
+  { key: '2', display_name: '已结束' }
 ]
 const TypeOptions = [
   { key: '1', display_name: '普通权限' },
