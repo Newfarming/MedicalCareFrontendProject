@@ -1,6 +1,7 @@
 import request from '@/utils/request'
-
+import { getToken } from '@/utils/auth'
 export function getUserList(params) {
+  params.token = getToken()
   return request({
     url: '/user/list',
     method: 'get',
@@ -9,6 +10,7 @@ export function getUserList(params) {
 }
 
 export function getDepartList(params) {
+  params.token = getToken()
   return request({
     url: '/depart/list',
     method: 'get',
@@ -16,6 +18,7 @@ export function getDepartList(params) {
   })
 }
 export function getDepartDetails(params) {
+  params.token = getToken()
   return request({
     url: '/depart/details',
     method: 'get',
@@ -23,6 +26,7 @@ export function getDepartDetails(params) {
   })
 }
 export function departDelete(params) {
+  params.token = getToken()
   return request({
     url: '/depart/delete',
     method: 'get',
@@ -30,6 +34,7 @@ export function departDelete(params) {
   })
 }
 export function departEdit(params) {
+  params.token = getToken()
   return request({
     url: '/depart/edit',
     method: 'get',
@@ -37,6 +42,7 @@ export function departEdit(params) {
   })
 }
 export function departAdd(params) {
+  params.token = getToken()
   return request({
     url: '/depart/add',
     method: 'get',
@@ -45,6 +51,7 @@ export function departAdd(params) {
 }
 
 export function getActivityList(params) {
+  params.token = getToken()
   return request({
     url: '/activity/list',
     method: 'get',
@@ -52,6 +59,7 @@ export function getActivityList(params) {
   })
 }
 export function getActivityDetails(params) {
+  params.token = getToken()
   return request({
     url: '/activity/details',
     method: 'get',
@@ -59,6 +67,7 @@ export function getActivityDetails(params) {
   })
 }
 export function activityDelete(params) {
+  params.token = getToken()
   return request({
     url: '/activity/delete',
     method: 'get',
@@ -66,6 +75,7 @@ export function activityDelete(params) {
   })
 }
 export function activityEdit(params) {
+  params.token = getToken()
   return request({
     url: '/activity/edit',
     method: 'get',
@@ -73,6 +83,7 @@ export function activityEdit(params) {
   })
 }
 export function activityAdd(params) {
+  params.token = getToken()
   return request({
     url: '/activity/add',
     method: 'get',
