@@ -4,14 +4,17 @@
       <el-form-item label="活动名称:" class="el_form">
         <el-input v-model="temp.title" />
       </el-form-item>
-      <el-form-item label="日期:" class="el_form">
-        <el-date-picker v-model="temp.start_time" type="datetime" placeholder="Please pick a date" />
-      </el-form-item>
       <el-form-item label="地点:" class="el_form">
         <el-input v-model="temp.place" />
       </el-form-item>
+      <el-form-item label="日期:" class="el_form">
+        <el-date-picker v-model="temp.start_time" type="datetime" placeholder="Please pick a date" />
+      </el-form-item>
       <el-form-item label="持续时间(天):" class="el_form">
         <el-input v-model="temp.last_time" />
+      </el-form-item>
+      <el-form-item label="活动积分:" class="el_form">
+        <el-input v-model="temp.score" />
       </el-form-item>
       <el-form-item label="活动状态:" class="el_form">
         <el-select v-model="temp.activity_status" class="filter-item" placeholder="Please select">

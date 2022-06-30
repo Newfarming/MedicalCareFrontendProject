@@ -26,28 +26,28 @@
     >
       <el-table-column label="ID" prop="id" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
-          <span>{{ row.pk }}</span>
+          <span>{{ row.id }}</span>
         </template>
       </el-table-column>
       <el-table-column label="姓名" min-width="150px">
         <template slot-scope="{row}">
-          <span class="link-type" @click="handleJumpDetails(row)">{{ row.fields.name }}</span>
+          <span class="link-type" @click="handleJumpDetails(row)">{{ row.name }}</span>
         </template>
       </el-table-column>
       <el-table-column label="工号" min-width="150px">
         <template slot-scope="{row}">
-          <span class="link-type" @click="handleJumpDetails(row)">{{ row.fields.workNo }}</span>
+          <span class="link-type" @click="handleJumpDetails(row)">{{ row.workNo }}</span>
         </template>
       </el-table-column>
       <el-table-column label="手机号" min-width="150px">
         <template slot-scope="{row}">
-          <span class="link-type" @click="handleJumpDetails(row)">{{ row.fields.phone }}</span>
+          <span class="link-type" @click="handleJumpDetails(row)">{{ row.phone }}</span>
           <!--          <el-tag>{{ row.type | typeFilter }}</el-tag>-->
         </template>
       </el-table-column>
       <el-table-column label="部门" min-width="150px">
         <template slot-scope="{row}">
-          <span class="link-type" @click="handleJumpDetails(row)">{{ 'depart[row.pk].fields.title' }}</span>
+          <span class="link-type" @click="handleJumpDetails(row)">{{ row.depart_name }}</span>
           <!--          <el-tag>{{ row.type | typeFilter }}</el-tag>-->
         </template>
       </el-table-column>
@@ -59,7 +59,7 @@
           <el-button size="mini" type="success" @click="handleJumpDetails(row)">
             详情
           </el-button>
-          <el-button v-if="row.status!='deleted'" size="mini" type="danger" @click="handleDelete(row,$index)">
+          <el-button v-if="row.status!='deleted'" size="mini" type="danger" @click="handleDelete(row,row.id)">
             删除
           </el-button>
         </template>
@@ -139,11 +139,11 @@ export default {
       })
     },
     handleJumpDetails(row) {
-      this.$router.push('/user/user-details/' + row.pk)
+      this.$router.push('/user/user-details/' + row.id)
     },
     handleJumpEdit(row) {
       console.log('row:' + JSON.stringify(row))
-      this.$router.push('/user/user-edit/' + row.pk)
+      this.$router.push('/user/user-edit/' + row.id)
     },
     handleJumpAdd() {
       this.$router.push('/user/user-add')
