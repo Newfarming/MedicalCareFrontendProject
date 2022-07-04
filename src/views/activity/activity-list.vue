@@ -5,15 +5,15 @@
       <el-select v-model="listQuery.type" placeholder="搜索类型" clearable class="filter-item" style="width: 120px;margin-right: 10px;">
         <el-option v-for="item in TypeOptions" :key="item.key" :label="item.display_name" :value="item.key" />
       </el-select>
-      <el-button  class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+      <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         搜索活动
       </el-button>
-      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleJumpAdd">
+      <el-button v-show="permission_type.indexOf('9')>=0" class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleJumpAdd">
         添加活动
       </el-button>
-<!--      <el-button v-waves :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">-->
-<!--        Export-->
-<!--      </el-button>-->
+      <!--      <el-button v-waves :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">-->
+      <!--        Export-->
+      <!--      </el-button>-->
     </div>
 
     <el-table
@@ -34,7 +34,7 @@
       <el-table-column label="活动标题" min-width="150px">
         <template slot-scope="{row}">
           <span class="link-type" @click="handleJumpDetails(row)">{{ row.fields.name }}</span>
-<!--          <el-tag>{{ row.type | typeFilter }}</el-tag>-->
+          <!--          <el-tag>{{ row.type | typeFilter }}</el-tag>-->
         </template>
       </el-table-column>
       <el-table-column label="创建日期" width="150px" align="center">
@@ -51,13 +51,13 @@
       </el-table-column>
       <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
-          <el-button type="primary" size="mini" @click="handleJumpEdit(row)">
+          <el-button v-show="permission_type.indexOf('12')>=0" type="primary" size="mini" @click="handleJumpEdit(row)">
             编辑
           </el-button>
           <el-button size="mini" type="success" @click="handleJumpDetails(row)">
             详情
           </el-button>
-          <el-button v-if="row.status!='deleted'" size="mini" type="danger" @click="handleDelete(row,$index)">
+          <el-button v-show="permission_type.indexOf('10')>=0" size="mini" type="danger" @click="handleDelete(row,$index)">
             删除
           </el-button>
         </template>
@@ -70,7 +70,8 @@
 
 <script>
 import { getActivityList, activityDelete } from '@/api/table'
-import Pagination from '@/components/Pagination' // secondary package based on el-pagination
+import Pagination from '@/components/Pagination'
+import { getPermissionTypeCookie } from '@/utils/auth' // secondary package based on el-pagination
 
 const TypeOptions = [
   { key: '1', display_name: '姓名' },
@@ -114,7 +115,8 @@ export default {
         title: undefined,
         type: undefined,
         sort: '+id'
-      }
+      },
+      permission_type: getPermissionTypeCookie().split(',')
     }
   },
   created() {
@@ -129,7 +131,7 @@ export default {
         pageStart: 0,
         pagesize: 10
       }).then(response => {
-        console.log('getActivityList',getActivityList)
+        console.log('getActivityList', getActivityList)
         this.list = response.data
         this.listLoading = false
         this.total = 100

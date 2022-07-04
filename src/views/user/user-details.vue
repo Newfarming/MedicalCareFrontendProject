@@ -19,6 +19,9 @@
       <el-form-item label="部门:" class="el_form">
         <div>{{temp.depart_id}}</div>
       </el-form-item>
+      <el-form-item label="权限:" class="el_form">
+        <div>{{temp.permisstion_name}}</div>
+      </el-form-item>
       <div style="text-align: center;">
         <el-button type="primary" style="margin-right: 40px;min-width: 120px;" @click="handleJumpLists">确定</el-button>
         <el-button type="info" style="min-width: 120px;" @click="handleJumpLists">取消</el-button>
@@ -77,7 +80,9 @@ export default {
         depart_id: '',
         phone: '',
         workNo: '',
-        identityCard: ''
+        identityCard: '',
+        permission_id: '',
+        permisstion_name: ''
       },
       total: 0,
       tableKey: 0,

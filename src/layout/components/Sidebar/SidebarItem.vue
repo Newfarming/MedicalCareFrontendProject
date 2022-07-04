@@ -1,5 +1,6 @@
 <template>
-  <div v-if="!item.hidden">
+  <div v-if="!item.hidden&& (item.meta&&item.meta.permissionType && permission_type.indexOf(item.meta.permissionType)>0)">
+
     <template v-if="hasOneShowingChild(item.children,item) && (!onlyOneChild.children||onlyOneChild.noShowingChildren)&&!item.alwaysShow">
       <app-link v-if="onlyOneChild.meta" :to="resolvePath(onlyOneChild.path)">
         <el-menu-item :index="resolvePath(onlyOneChild.path)" :class="{'submenu-title-noDropdown':!isNest}">
@@ -27,10 +28,10 @@
 <script>
 import path from 'path'
 import { isExternal } from '@/utils/validate'
+import { getPermissionTypeCookie } from '@/utils/auth'
 import Item from './Item'
 import AppLink from './Link'
 import FixiOSBug from './FixiOSBug'
-
 export default {
   name: 'SidebarItem',
   components: { Item, AppLink },
@@ -54,7 +55,15 @@ export default {
     // To fix https://github.com/PanJiaChen/vue-admin-template/issues/237
     // TODO: refactor with render function
     this.onlyOneChild = null
-    return {}
+    return {
+      permission_type: []
+    }
+  },
+  created() {
+
+  },
+  mounted() {
+    this.permission_type = getPermissionTypeCookie().split(',')
   },
   methods: {
     hasOneShowingChild(children = [], parent) {

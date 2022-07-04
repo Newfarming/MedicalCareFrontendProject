@@ -5,7 +5,7 @@
       <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         搜索部门
       </el-button>
-      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleJumpAdd">
+      <el-button v-show="permission_type.indexOf('5')>=0" class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleJumpAdd">
         添加部门
       </el-button>
     </div>
@@ -33,13 +33,13 @@
       </el-table-column>
       <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
-          <el-button type="primary" size="mini" @click="handleJumpEdit(row)">
+          <el-button v-show="permission_type.indexOf('8')>=0" type="primary" size="mini" @click="handleJumpEdit(row)">
             编辑
           </el-button>
           <el-button size="mini" type="success" @click="handleJumpDetails(row)">
             详情
           </el-button>
-          <el-button v-if="row.status!='deleted'" size="mini" type="danger" @click="handleDelete(row,$index)">
+          <el-button v-show="permission_type.indexOf('6')>=0"  size="mini" type="danger" @click="handleDelete(row,$index)">
             删除
           </el-button>
         </template>
@@ -53,6 +53,8 @@
 <script>
 import { getDepartList, departDelete } from '@/api/table'
 // import { userDelete } from '@/api/user'
+import { getPermissionTypeCookie } from '@/utils/auth' // secondary package based on el-pagination
+
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 const TypeOptions = [
@@ -89,7 +91,8 @@ export default {
         title: undefined,
         type: undefined,
         sort: '+id'
-      }
+      },
+      permission_type: getPermissionTypeCookie().split(',')
     }
   },
   created() {

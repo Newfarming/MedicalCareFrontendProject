@@ -62,3 +62,14 @@ export function userDelete(params) {
     params: params
   })
 }
+
+export function getPermissionList(params) {
+  // console.log('data', data)
+  params.token = getToken()
+  return request({
+    url: '/permission/list',
+    method: 'get',
+    params: params
+  })
+}
+

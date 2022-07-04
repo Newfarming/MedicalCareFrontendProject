@@ -21,6 +21,11 @@
           <el-option v-for="item in depart" :key="item.pk" :label="item.fields.title" :value="item.pk" />
         </el-select>
       </el-form-item>
+      <el-form-item label="权限:" class="el_form">
+        <el-select v-model="temp.permission_id" placeholder="权限" clearable class="filter-item" style="width: 120px;margin-right: 10px;">
+          <el-option v-for="item in permissionList" :key="item.pk" :label="item.fields.name" :value="item.pk" />
+        </el-select>
+      </el-form-item>
       <el-form-item label="密码:" class="el_form">
         <el-input v-model="temp.password" />
       </el-form-item>
@@ -42,6 +47,7 @@
 </template>
 <script>
 import { getDepartList } from '@/api/table'
+import { getPermissionList } from '@/api/user'
 import { userAdd } from '@/api/user'
 
 const activityStatusOptions = [
@@ -90,12 +96,14 @@ export default {
         depart_id: '',
         phone: '',
         workNo: '',
-        identityCard: ''
+        identityCard: '',
+        permission_id: ''
       },
       total: 0,
       tableKey: 0,
       list: null,
       depart: null,
+      permissionList: null,
       listLoading: true,
       listQuery: {
         page: 1,
@@ -113,6 +121,14 @@ export default {
   methods: {
     fetchData() {
       this.listLoading = true
+      getPermissionList({ search: '',
+        // search_type: 'title',
+        pageStart: 0,
+        pagesize: 100
+      }).then(response => {
+        this.permissionList = response.data
+        this.listLoading = false
+      })
       getDepartList({
         search: '',
         // search_type: 'title',

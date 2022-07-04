@@ -1,12 +1,14 @@
 import { login, logout, getInfo } from '@/api/user'
-import { getToken, setToken, removeToken } from '@/utils/auth'
+import { getToken, setToken, removeToken, getPermissionNameCookie, setPermissionNameCookie, removePermissionNameCookie, getPermissionTypeCookie, setPermissionTypeCookie, removePermissionTypeCookie } from '@/utils/auth'
 import { resetRouter } from '@/router'
 
 const getDefaultState = () => {
   return {
     token: getToken(),
     name: '',
-    avatar: ''
+    avatar: '',
+    permission_name: getPermissionNameCookie(),
+    permission_type: getPermissionTypeCookie(),
   }
 }
 
@@ -24,6 +26,12 @@ const mutations = {
   },
   SET_AVATAR: (state, avatar) => {
     state.avatar = avatar
+  },
+  SET_PERMISSION_TYPE: (state, permission_type) => {
+    state.permission_type = permission_type
+  },
+  SET_PERMISSION_NAME: (state, permission_name) => {
+    state.permission_name = permission_name
   }
 }
 
@@ -39,6 +47,10 @@ const actions = {
         console.log('data token', data)
         commit('SET_TOKEN', data.token)
         setToken(data.token)
+        commit('SET_PERMISSION_NAME', data.permission_name)
+        setPermissionNameCookie(data.permission_name)
+        commit('SET_PERMISSION_TYPE', data.permission_type)
+        setPermissionTypeCookie(data.permission_type)
         resolve()
       }).catch(error => {
         reject(error)

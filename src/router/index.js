@@ -38,34 +38,38 @@ export const constantRoutes = [
     name: 'activity',
     meta: {
       title: '活动',
-      icon: 'table'
+      icon: 'table',
+      permissionType: '11'
+      // roles: ['管理员', '普通扫码操作员', '可新增活动的操作员']
     },
     children: [
       {
         path: 'activity-list',
         component: () => import('@/views/activity/activity-list'),
         name: 'activityList',
-        meta: { title: '活动列表' }
+        meta: {
+          title: '活动列表',
+          permissionType: '11' }
       },
       {
         path: 'activity-edit/:id',
         component: () => import('@/views/activity/activity-edit'),
         name: 'activityEdit',
-        meta: { title: '活动编辑', keepAlive: false },
+        meta: { title: '活动编辑', keepAlive: false, permissionType: '12' },
         hidden: true
       },
       {
         path: 'activity-add',
         component: () => import('@/views/activity/activity-add'),
         name: 'activityAdd',
-        meta: { title: '活动添加', keepAlive: false },
+        meta: { title: '活动添加', keepAlive: false, permissionType: '9' },
         hidden: true
       },
       {
         path: 'activity-details/:id',
         component: () => import('@/views/activity/activity-details'),
         name: 'activityDetails',
-        meta: { title: '活动详情', keepAlive: false },
+        meta: { title: '活动详情', keepAlive: false, permissionType: '11' },
         hidden: true
       },
       {
@@ -85,34 +89,35 @@ export const constantRoutes = [
     name: 'user',
     meta: {
       title: '人员',
-      icon: 'user'
+      icon: 'user', permissionType: '3'
+      // roles: ['管理员']
     },
     children: [
       {
         path: 'user-list',
         component: () => import('@/views/user/user-list'),
         name: 'userList',
-        meta: { title: '人员列表' }
+        meta: { title: '人员列表', permissionType: '3' }
       },
       {
         path: 'user-edit/:id',
         component: () => import('@/views/user/user-edit'),
         name: 'userEdit',
-        meta: { title: '人员编辑', keepAlive: false },
+        meta: { title: '人员编辑', keepAlive: false, permissionType: '4' },
         hidden: true
       },
       {
         path: 'user-add',
         component: () => import('@/views/user/user-add'),
         name: 'userAdd',
-        meta: { title: '人员添加', keepAlive: false },
+        meta: { title: '人员添加', keepAlive: false, permissionType: '1' },
         hidden: true
       },
       {
         path: 'user-details/:id',
         component: () => import('@/views/user/user-details'),
         name: 'userDetails',
-        meta: { title: '人员详情', keepAlive: false },
+        meta: { title: '人员详情', keepAlive: false, permissionType: '3' },
         hidden: true
       }
     ]
@@ -124,34 +129,35 @@ export const constantRoutes = [
     name: 'department',
     meta: {
       title: '部门',
-      icon: 'tree'
+      icon: 'tree', permissionType: '7'
+      // roles: ['管理员']
     },
     children: [
       {
         path: 'department-list',
         component: () => import('@/views/department/department-list'),
         name: 'departmentList',
-        meta: { title: '部门列表' }
+        meta: { title: '部门列表', permissionType: '7' }
       },
       {
         path: 'department-edit/:id',
         component: () => import('@/views/department/department-edit'),
         name: 'departmentEdit',
-        meta: { title: '部门编辑', keepAlive: false },
+        meta: { title: '部门编辑', keepAlive: false, permissionType: '8' },
         hidden: true
       },
       {
         path: 'department-add',
         component: () => import('@/views/department/department-add'),
         name: 'departmentAdd',
-        meta: { title: '部门添加', keepAlive: false },
+        meta: { title: '部门添加', keepAlive: false, permissionType: '5' },
         hidden: true
       },
       {
         path: 'department-details/:id',
         component: () => import('@/views/department/department-details'),
         name: 'departmentDetails',
-        meta: { title: '部门详情', keepAlive: false },
+        meta: { title: '部门详情', keepAlive: false, permissionType: '8' },
         hidden: true
       }
     ]
@@ -171,21 +177,22 @@ export const constantRoutes = [
   {
     path: '/',
     component: Layout,
-    redirect: '/dashboard',
-    children: [{
-      path: 'dashboard',
-      name: 'Dashboard',
-      component: () => import('@/views/dashboard/index'),
-      meta: { title: 'Dashboard', icon: 'dashboard' }
-    }]
+    redirect: '/activity/activity-list',
+    // children: [{
+    //   path: 'dashboard',
+    //   name: 'Dashboard',
+    //   component: () => import('@/views/dashboard/index'),
+    //   meta: { title: 'Dashboard', icon: 'dashboard' },
+    //   hidden: true
+    // }]
   },
-
   {
     path: '/example',
     component: Layout,
     redirect: '/example/table',
     name: 'Example',
     meta: { title: 'Example', icon: 'el-icon-s-help' },
+    hidden: true,
     children: [
       {
         path: 'table',
@@ -205,6 +212,7 @@ export const constantRoutes = [
   {
     path: '/form',
     component: Layout,
+    hidden: true,
     children: [
       {
         path: 'index',
@@ -220,6 +228,7 @@ export const constantRoutes = [
     component: Layout,
     redirect: '/nested/menu1',
     name: 'Nested',
+    hidden: true,
     meta: {
       title: 'Nested',
       icon: 'nested'
@@ -269,18 +278,8 @@ export const constantRoutes = [
         path: 'menu2',
         component: () => import('@/views/nested/menu2/index'),
         name: 'Menu2',
+        hidden: true,
         meta: { title: 'menu2' }
-      }
-    ]
-  },
-
-  {
-    path: 'external-link',
-    component: Layout,
-    children: [
-      {
-        path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
-        meta: { title: 'External Link', icon: 'link' }
       }
     ]
   },

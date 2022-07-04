@@ -8,7 +8,7 @@
       <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         搜索人员
       </el-button>
-      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleJumpAdd">
+      <el-button v-show="permission_type.indexOf('1')>=0" class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleJumpAdd">
         添加人员
       </el-button>
     </div>
@@ -17,7 +17,7 @@
       :key="tableKey"
       v-loading="listLoading"
       :data="list"
-      :depart = "depart"
+      :depart="depart"
       border
       fit
       highlight-current-row
@@ -52,14 +52,14 @@
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
-        <template slot-scope="{row,$index}">
-          <el-button type="primary" size="mini" @click="handleJumpEdit(row)">
+        <template  slot-scope="{row}">
+          <el-button v-show="permission_type.indexOf('4')>=0" type="primary" size="mini" @click="handleJumpEdit(row)">
             编辑
           </el-button>
           <el-button size="mini" type="success" @click="handleJumpDetails(row)">
             详情
           </el-button>
-          <el-button v-if="row.status!='deleted'" size="mini" type="danger" @click="handleDelete(row,row.id)">
+          <el-button v-show="permission_type.indexOf('2')>=0" size="mini" type="danger" @click="handleDelete(row,row.id)">
             删除
           </el-button>
         </template>
@@ -73,6 +73,7 @@
 <script>
 import { getUserList, getDepartList } from '@/api/table'
 import { userDelete } from '@/api/user'
+import { getPermissionTypeCookie } from '@/utils/auth'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 const TypeOptions = [
@@ -109,7 +110,8 @@ export default {
         title: undefined,
         type: undefined,
         sort: '+id'
-      }
+      },
+      permission_type: getPermissionTypeCookie().split(',')
     }
   },
   created() {

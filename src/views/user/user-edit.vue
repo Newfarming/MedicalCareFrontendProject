@@ -21,6 +21,11 @@
           <el-option v-for="item in depart" :key="item.pk" :label="item.fields.title" :value="item.pk" />
         </el-select>
       </el-form-item>
+      <el-form-item label="权限:" class="el_form">
+        <el-select v-model="temp.permission_id" placeholder="权限" clearable class="filter-item" style="width: 120px;margin-right: 10px;">
+          <el-option v-for="item in permissionList" :key="item.pk" :label="item.fields.name" :value="item.pk" />
+        </el-select>
+      </el-form-item>
       <el-form-item label="密码:" class="el_form">
         <el-input v-model="temp.password" />
       </el-form-item>
@@ -42,7 +47,7 @@
 </template>
 <script>
 import { getDepartList } from '@/api/table'
-import { userEdit, getUserDetails } from '@/api/user'
+import {userEdit, getUserDetails, getPermissionList} from '@/api/user'
 
 const activityStatusOptions = [
   { key: 'processing', display_name: '进行中' },
@@ -92,11 +97,13 @@ export default {
         phone: '',
         workNo: '',
         identityCard: '',
+        permission_id: ''
       },
       total: 0,
       tableKey: 0,
       list: null,
       depart: null,
+      permissionList:null,
       listLoading: true,
       listQuery: {
         page: 1,
@@ -115,6 +122,14 @@ export default {
     fetchData() {
       console.log('this.$route.params', this.$route.params)
       this.listLoading = true
+      getPermissionList({ search: '',
+        // search_type: 'title',
+        pageStart: 0,
+        pagesize: 100
+      }).then(response => {
+        this.permissionList = response.data
+        this.listLoading = false
+      })
       getDepartList({
         search: '',
         search_type: 'title',
@@ -135,7 +150,8 @@ export default {
         this.temp.workNo = response.data.workNo
         this.temp.phone = response.data.phone
         this.temp.depart_id = response.data.depart_id
-        this.temp.password = response.data.password
+        this.temp.permission_id = response.data.permission_id
+        // this.temp.password = response.data.password
         this.temp.id = response.data.id
       })
     },
