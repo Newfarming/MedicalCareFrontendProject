@@ -173,6 +173,11 @@ export const constantRoutes = [
     component: () => import('@/views/404'),
     hidden: true
   },
+  {
+    path: '/log',
+    component: () => import('@/views/log/index'),
+    hidden: true
+  },
 
   {
     path: '/',

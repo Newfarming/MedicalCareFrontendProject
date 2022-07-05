@@ -2,10 +2,10 @@
   <div class="app-container">
     <div class="filter-container">
       <el-input v-model="listQuery.title" placeholder="搜索内容" style="width: 150px;margin-right: 10px;" class="filter-item" @keyup.enter.native="handleFilter" />
-      <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+      <el-button style="margin-top:5px;" class="filter-item" type="primary" icon="el-icon-search" @click="fetchData">
         搜索部门
       </el-button>
-      <el-button v-show="permission_type.indexOf('5')>=0" class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleJumpAdd">
+      <el-button v-show="permission_type.indexOf('5')>=0" class="filter-item" style="margin-left: 10px;margin-top: 5px;" type="primary" icon="el-icon-edit" @click="handleJumpAdd">
         添加部门
       </el-button>
     </div>
@@ -36,9 +36,9 @@
           <el-button v-show="permission_type.indexOf('8')>=0" type="primary" size="mini" @click="handleJumpEdit(row)">
             编辑
           </el-button>
-          <el-button size="mini" type="success" @click="handleJumpDetails(row)">
-            详情
-          </el-button>
+<!--          <el-button size="mini" type="success" @click="handleJumpDetails(row)">-->
+<!--            详情-->
+<!--          </el-button>-->
           <el-button v-show="permission_type.indexOf('6')>=0"  size="mini" type="danger" @click="handleDelete(row,$index)">
             删除
           </el-button>
@@ -102,7 +102,7 @@ export default {
     fetchData() {
       this.listLoading = true
       getDepartList({
-        search: '',
+        search: this.listQuery.title,
         search_type: 'title',
         pageStart: 0,
         pagesize: 100

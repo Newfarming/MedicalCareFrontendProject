@@ -2,7 +2,7 @@
   <div class="m-activity_details">
     <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="100px">
       <el-form-item label="活动名称:" class="el_form">
-        <el-input v-model="temp.title" />
+        <el-input v-model="temp.name" />
       </el-form-item>
       <el-form-item label="地点:" class="el_form">
         <el-input v-model="temp.place" />
@@ -11,7 +11,7 @@
         <el-date-picker v-model="temp.start_time" type="datetime" placeholder="Please pick a date" />
       </el-form-item>
       <el-form-item label="持续时间(天):" class="el_form">
-        <el-input v-model="temp.last_time" />
+        <el-input v-model="temp.lasting_time" />
       </el-form-item>
       <el-form-item label="活动积分:" class="el_form">
         <el-input v-model="temp.score" />
@@ -22,7 +22,7 @@
           </el-select>
       </el-form-item>
       <div style="text-align: center;">
-        <el-button type="primary" style="margin-right: 40px;min-width: 120px;" @click="handleJumpLists">确定</el-button>
+        <el-button type="primary" style="margin-right: 40px;min-width: 120px;" @click="handleEditActivity">确定</el-button>
         <el-button type="info" style="min-width: 120px;" @click="handleJumpLists">取消</el-button>
       </div>
 
@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import { getDepartList } from '@/api/table'
+import { getDepartList, getActivityDetails, activityEdit} from '@/api/table'
 import { userEdit, getUserDetails } from '@/api/user'
 
 const activityStatusOptions = [
@@ -75,8 +75,13 @@ export default {
         title: [{ required: true, message: 'title is required', trigger: 'blur' }]
       },
       temp: {
-        id: '',
-        title: ''
+        name: '',
+        start_time: '',
+        lasting_time: '',
+        place: '',
+        score: '',
+        activity_status: '',
+        id: ''
       },
       total: 0,
       tableKey: 0,
@@ -100,42 +105,41 @@ export default {
     fetchData() {
       console.log('this.$route.params', this.$route.params)
       this.listLoading = true
-      getDepartList({
-        search: '',
-        search_type: 'title',
-        pageStart: 0,
-        pagesize: 100
-      }).then(response => {
-        this.depart = response.data
-        console.log('getDepartList response', response)
-        this.listLoading = false
-      })
-      getUserDetails({
+      // getDepartList({
+      //   search: '',
+      //   search_type: 'title',
+      //   pageStart: 0,
+      //   pagesize: 100
+      // }).then(response => {
+      //   this.depart = response.data
+      //   console.log('getDepartList response', response)
+      //   this.listLoading = false
+      // })
+      getActivityDetails({
         id: this.$route.params.id
       }).then(response => {
-        console.log('user details info response', response)
-        this.temp.identityCard = response.data.identityCard
-        this.temp.username = response.data.username
+        console.log('getActivityDetails details info response', response)
         this.temp.name = response.data.name
-        this.temp.workNo = response.data.workNo
-        this.temp.phone = response.data.phone
-        this.temp.depart_id = response.data.depart_id
-        this.temp.password = response.data.password
+        this.temp.place = response.data.place
+        this.temp.start_time = response.data.start_time
+        this.temp.lasting_time = response.data.lasting_time
+        this.temp.score = response.data.score
+        this.temp.activity_status = response.data.activity_status
         this.temp.id = response.data.id
       })
     },
-    userEdit() {
-      userEdit(this.temp).then(response => {
+    activityEdit() {
+      activityEdit(this.temp).then(response => {
         if (response.data === 'success') {
-          this.$router.push('/user/user-list/')
+          this.$router.push('/activity/activity-list/')
         }
       })
     },
     handleJumpLists() {
-      this.$router.push('/user/user-list/')
+      this.$router.push('/activity/activity-list/')
     },
-    handleEditUser() {
-      this.userEdit()
+    handleEditActivity() {
+      this.activityEdit()
     }
   }
 }

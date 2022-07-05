@@ -3,12 +3,12 @@
     <div class="filter-container">
       <el-input v-model="listQuery.title" placeholder="搜索内容" style="width: 150px;margin-right: 10px;" class="filter-item" @keyup.enter.native="handleFilter" />
       <el-select v-model="listQuery.type" placeholder="搜索类型" clearable class="filter-item" style="width: 120px;margin-right: 10px;">
-        <el-option v-for="item in TypeOptions" :key="item.key" :label="item.display_name" :value="item.key" />
+        <el-option v-for="item in TypeOptions" :key="item.key" :label="item.display_name" :value="item.value" />
       </el-select>
-      <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+      <el-button class="filter-item" type="primary" icon="el-icon-search" style="margin-top:5px;" @click="fetchData">
         搜索活动
       </el-button>
-      <el-button v-show="permission_type.indexOf('9')>=0" class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleJumpAdd">
+      <el-button v-show="permission_type.indexOf('9')>=0" class="filter-item" style="margin-left: 10px; margin-top:5px;" type="primary" icon="el-icon-edit" @click="handleJumpAdd">
         添加活动
       </el-button>
       <!--      <el-button v-waves :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">-->
@@ -31,18 +31,18 @@
           <span>{{ row.pk }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="活动标题" min-width="150px">
+      <el-table-column label="活动标题" min-width="150px" @click="handleJumpDetails(row)">
         <template slot-scope="{row}">
           <span class="link-type" @click="handleJumpDetails(row)">{{ row.fields.name }}</span>
           <!--          <el-tag>{{ row.type | typeFilter }}</el-tag>-->
         </template>
       </el-table-column>
-      <el-table-column label="创建日期" width="150px" align="center">
+      <el-table-column label="创建日期" width="150px" align="center" @click="handleJumpDetails(row)">
         <template slot-scope="{row}">
           <span>{{ row.fields.start_time }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="活动状态" class-name="status-col" width="100">
+      <el-table-column label="活动状态" class-name="status-col" width="100" @click="handleJumpDetails(row)">
         <template slot-scope="{row}">
           <el-tag :type="row.fields.activity_status | statusFilter">
             {{ row.fields.activity_status | statusNameFilter }}
@@ -74,10 +74,10 @@ import Pagination from '@/components/Pagination'
 import { getPermissionTypeCookie } from '@/utils/auth' // secondary package based on el-pagination
 
 const TypeOptions = [
-  { key: '1', display_name: '姓名' },
-  { key: '2', display_name: '工号' },
-  { key: '3', display_name: '手机号' },
-  { key: '4', display_name: '部门' }
+  { key: '1', display_name: '活动名', value: 'name' },
+  { key: '2', display_name: '地点', value: 'place' },
+  { key: '3', display_name: '积分', value: 'score' }
+  // { key: '4', display_name: '开始时间', value: 'start_name' }
 ]
 export default {
   name: 'UserList',
@@ -112,8 +112,8 @@ export default {
         page: 1,
         limit: 20,
         importance: undefined,
-        title: undefined,
-        type: undefined,
+        title: '',
+        type: '',
         sort: '+id'
       },
       permission_type: getPermissionTypeCookie().split(',')
@@ -126,15 +126,15 @@ export default {
     fetchData() {
       this.listLoading = true
       getActivityList({
-        search: '',
-        search_type: 'name',
-        pageStart: 0,
-        pagesize: 10
+        search: this.listQuery.title || '',
+        search_type: this.listQuery.type || '',
+        pageStart: this.listQuery.page - 1 || 0,
+        pagesize: this.listQuery.limit || 20
       }).then(response => {
-        console.log('getActivityList', getActivityList)
+        // console.log('getActivityList', getActivityList)
         this.list = response.data
         this.listLoading = false
-        this.total = 100
+        this.total = response.total
       })
     },
     handleJumpDetails(row) {
@@ -154,15 +154,25 @@ export default {
         // this.listLoading = false
       })
     },
-    handleFilter() {
-      // this.listQuery.page = 1
-      // this.get()
+    handleSearch() {
+      this.listLoading = true
+      getActivityList({
+        search: this.listQuery.title || '',
+        search_type: this.listQuery.type || '',
+        pageStart: 0,
+        pagesize: 10
+      }).then(response => {
+        // console.log('getActivityList', getActivityList)
+        this.list = response.data
+        this.listLoading = false
+        this.total = 100
+      })
     },
     sortChange(data) {
-      const { prop, order } = data
-      if (prop === 'id') {
-        this.sortByID(order)
-      }
+      // const { prop, order } = data
+      // if (prop === 'id') {
+      //   this.sortByID(order)
+      // }
     },
     getSortClass: function(key) {
       const sort = this.listQuery.sort

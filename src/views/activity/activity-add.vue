@@ -77,7 +77,8 @@ export default {
         lasting_time: '',
         place: '',
         score: '',
-        activity_status: ''
+        activity_status: '',
+        id: ''
       },
       total: 0,
       tableKey: 0,
@@ -114,12 +115,12 @@ export default {
     activityAdd() {
       activityAdd(this.temp).then(response => {
         if (response.data === 'success') {
-          this.$router.push('/user/user-list/')
+          this.$router.push('/activity/activity-list/')
         }
       })
     },
     handleJumpLists() {
-      this.$router.push('/user/user-list/')
+      this.$router.push('/activity/activity-list/')
     },
     handleAddActivity() {
       this.activityAdd()

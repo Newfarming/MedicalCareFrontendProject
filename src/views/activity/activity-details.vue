@@ -133,12 +133,12 @@ export default {
     userAdd() {
       userAdd(this.temp).then(response => {
         if (response.data === 'success') {
-          this.$router.push('/user/user-list/')
+          this.$router.push('/activity/activity-list/')
         }
       })
     },
     handleJumpLists() {
-      this.$router.push('/user/user-list/')
+      this.$router.push('/activity/activity-list/')
     },
     handleAddUser() {
       this.userAdd()

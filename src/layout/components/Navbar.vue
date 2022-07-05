@@ -16,7 +16,7 @@
 <!--              Home-->
 <!--            </el-dropdown-item>-->
 <!--          </router-link>-->
-          <a target="_blank" href="https://github.com/PanJiaChen/vue-admin-template/">
+          <a target="_blank" href="/#/log">
             <el-dropdown-item>个人操作记录</el-dropdown-item>
           </a>
           <el-dropdown-item divided @click.native="logout">
