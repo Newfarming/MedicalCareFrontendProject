@@ -15,54 +15,99 @@
       <!--        Export-->
       <!--      </el-button>-->
     </div>
-
-    <el-table
-      :key="tableKey"
-      v-loading="listLoading"
-      :data="list"
-      border
-      fit
-      highlight-current-row
-      style="width: 100%;"
-      @sort-change="sortChange"
-    >
-      <el-table-column label="ID" prop="id" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
-        <template slot-scope="{row}">
-          <span>{{ row.pk }}</span>
+    <el-descriptions v-for="(item,index) in list" style="margin-top:30px;" class="m-activity_mobile_list_show" :title="item.pk" :column="3" :size="size" border>
+      <template slot="extra" >
+        <div style=" padding:5px 5px 0;">
+          <el-button v-show="permission_type.indexOf('12')>=0" size="mini" type="primary" @click="handleJumpEdit(item)">编辑</el-button>
+          <el-button type="success" size="small" @click="handleJumpDetails(item)">详情</el-button>
+          <el-button v-show="permission_type.indexOf('10')>=0" type="danger" size="small" @click="handleDelete(item,index)">删除</el-button>
+        </div>
+      </template>
+      <el-descriptions-item>
+        <template slot="label">
+          <i class="el-icon-s-order" />
+          活动名
         </template>
-      </el-table-column>
-      <el-table-column label="活动标题" min-width="150px" @click="handleJumpDetails(row)">
-        <template slot-scope="{row}">
-          <span class="link-type" @click="handleJumpDetails(row)">{{ row.fields.name }}</span>
-          <!--          <el-tag>{{ row.type | typeFilter }}</el-tag>-->
+        {{ item.fields.name }}
+      </el-descriptions-item>
+      <el-descriptions-item>
+        <template slot="label">
+          <i class="el-icon-date" />
+          创建日期
         </template>
-      </el-table-column>
-      <el-table-column label="创建日期" width="150px" align="center" @click="handleJumpDetails(row)">
-        <template slot-scope="{row}">
-          <span>{{ row.fields.start_time }}</span>
+        {{ item.fields.start_time }}
+      </el-descriptions-item>
+      <el-descriptions-item>
+        <template slot="label">
+          <i class="el-icon-timer" />
+          持续时间
         </template>
-      </el-table-column>
-      <el-table-column label="活动状态" class-name="status-col" width="100" @click="handleJumpDetails(row)">
-        <template slot-scope="{row}">
-          <el-tag :type="row.fields.activity_status | statusFilter">
-            {{ row.fields.activity_status | statusNameFilter }}
-          </el-tag>
+        {{ item.fields.lasting_time }}
+      </el-descriptions-item>
+      <el-descriptions-item>
+        <template slot="label">
+          <i class="el-icon-sugar" />
+          积分
         </template>
-      </el-table-column>
-      <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
-        <template slot-scope="{row,$index}">
-          <el-button v-show="permission_type.indexOf('12')>=0" type="primary" size="mini" @click="handleJumpEdit(row)">
-            编辑
-          </el-button>
-          <el-button size="mini" type="success" @click="handleJumpDetails(row)">
-            详情
-          </el-button>
-          <el-button v-show="permission_type.indexOf('10')>=0" size="mini" type="danger" @click="handleDelete(row,$index)">
-            删除
-          </el-button>
+        {{ item.fields.score }}
+      </el-descriptions-item>
+      <el-descriptions-item>
+        <template slot="label">
+          <i class="el-icon-office-building" />
+          活动地点
         </template>
-      </el-table-column>
-    </el-table>
+        {{ item.fields.place }}
+      </el-descriptions-item>
+    </el-descriptions>
+    <div class="m-activity_pc_list_show">
+      <el-table
+        :key="tableKey"
+        v-loading="listLoading"
+        :data="list"
+        border
+        fit
+        highlight-current-row
+        style="width: 100%;"
+        @sort-change="sortChange"
+      >
+        <el-table-column label="ID" prop="id" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
+          <template slot-scope="{row}">
+            <span>{{ row.pk }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="活动标题" min-width="150px" @click="handleJumpDetails(row)">
+          <template slot-scope="{row}">
+            <span class="link-type" @click="handleJumpDetails(row)">{{ row.fields.name }}</span>
+            <!--          <el-tag>{{ row.type | typeFilter }}</el-tag>-->
+          </template>
+        </el-table-column>
+        <el-table-column label="创建日期" width="150px" align="center" @click="handleJumpDetails(row)">
+          <template slot-scope="{row}">
+            <span>{{ row.fields.start_time }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="活动状态" class-name="status-col" width="100" @click="handleJumpDetails(row)">
+          <template slot-scope="{row}">
+            <el-tag :type="row.fields.activity_status | statusFilter">
+              {{ row.fields.activity_status | statusNameFilter }}
+            </el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
+          <template slot-scope="{row,$index}">
+            <el-button v-show="permission_type.indexOf('12')>=0" type="primary" size="mini" @click="handleJumpEdit(row)">
+              编辑
+            </el-button>
+            <el-button size="mini" type="success" @click="handleJumpDetails(row)">
+              详情
+            </el-button>
+            <el-button v-show="permission_type.indexOf('10')>=0" size="mini" type="danger" @click="handleDelete(row,$index)">
+              删除
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
 
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="fetchData" />
   </div>
@@ -102,6 +147,7 @@ export default {
   },
   data() {
     return {
+      size: '',
       total: 0,
       tableKey: 0,
       list: null,
