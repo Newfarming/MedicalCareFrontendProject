@@ -7,13 +7,12 @@ import { getToken } from '@/utils/auth'
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
   // withCredentials: true, // send cookies when cross-domain requests
-  timeout: 5000 // request timeout
-  // headers: {
-  //   'Access-Control-Allow-Origin': '*',
-  //   'Access-Control-Allow-Methods': 'GET,HEAD,OPTIONS,POST,PUT',
-  //   'Access-Control-Allow-Headers': 'Origin, Content-Type',
-  //   'Access-Control-Max-Age': '200'
-  // }
+  timeout: 5000, // request timeout
+  headers: {
+    // 'Access-Control-Allow-Origin': '*',
+    // 'Access-Control-Allow-Methods': 'GET,HEAD,OPTIONS,POST,PUT',
+    // 'Access-Control-Allow-Headers': 'Origin, Content-Type',
+  }
 })
 
 // request interceptor
