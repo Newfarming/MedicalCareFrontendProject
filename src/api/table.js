@@ -37,56 +37,15 @@ export function departEdit(params) {
   params.token = getToken()
   return request({
     url: '/depart/edit',
-    method: 'get',
-    params
+    method: 'post',
+    data: params
   })
 }
 export function departAdd(params) {
   params.token = getToken()
   return request({
     url: '/depart/add',
-    method: 'get',
-    params
-  })
-}
-
-export function getActivityList(params) {
-  params.token = getToken()
-  return request({
-    url: '/activity/list',
-    method: 'get',
-    params
-  })
-}
-export function getActivityDetails(params) {
-  params.token = getToken()
-  return request({
-    url: '/activity/details',
-    method: 'get',
-    params
-  })
-}
-export function activityDelete(params) {
-  params.token = getToken()
-  return request({
-    url: '/activity/delete',
-    method: 'get',
-    params
-  })
-}
-export function activityEdit(params) {
-  params.token = getToken()
-  return request({
-    url: '/activity/edit',
-    method: 'get',
-    params
-  })
-}
-export function activityAdd(params) {
-  params.token = getToken()
-  return request({
-    url: '/activity/add',
-    method: 'get',
-    params
+    method: 'post',
+    data: params
   })
 }

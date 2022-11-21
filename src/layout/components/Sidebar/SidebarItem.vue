@@ -1,6 +1,5 @@
 <template>
-  <div v-if="!item.hidden&& (item.meta&&item.meta.permissionType && permission_type.indexOf(item.meta.permissionType)>0)">
-
+  <div v-if="!item.hidden && item.meta && (parseInt(item.meta.permissionType)>= permission_t)">
     <template v-if="hasOneShowingChild(item.children,item) && (!onlyOneChild.children||onlyOneChild.noShowingChildren)&&!item.alwaysShow">
       <app-link v-if="onlyOneChild.meta" :to="resolvePath(onlyOneChild.path)">
         <el-menu-item :index="resolvePath(onlyOneChild.path)" :class="{'submenu-title-noDropdown':!isNest}">
@@ -56,7 +55,8 @@ export default {
     // TODO: refactor with render function
     this.onlyOneChild = null
     return {
-      permission_type: []
+      permission_type: [],
+      permission_t: 0
     }
   },
   created() {
@@ -64,6 +64,7 @@ export default {
   },
   mounted() {
     this.permission_type = getPermissionTypeCookie().split(',')
+    this.permission_t = parseInt(getPermissionTypeCookie())
   },
   methods: {
     hasOneShowingChild(children = [], parent) {

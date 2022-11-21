@@ -1,6 +1,6 @@
 module.exports = {
 
-  title: 'Vue Admin Template',
+  title: '自贡市第四人民医院医疗技术档案',
 
   /**
    * @type {boolean} true | false

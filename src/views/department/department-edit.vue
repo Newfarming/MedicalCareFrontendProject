@@ -4,6 +4,12 @@
       <el-form-item label="部门名:" class="el_form">
         <el-input v-model="temp.title" />
       </el-form-item>
+      <el-form-item label="账号:" class="el_form">
+        <el-input v-model="temp.account" />
+      </el-form-item>
+      <el-form-item label="密码:" class="el_form">
+        <el-input type="text" v-model="temp.password" />
+      </el-form-item>
       <div style="text-align: center;">
         <el-button type="primary" style="margin-right: 40px;min-width: 120px;" @click="handleEditDepart">确定</el-button>
         <el-button type="info" style="min-width: 120px;" @click="handleJumpLists">取消</el-button>
@@ -13,7 +19,7 @@
   </div>
 </template>
 <script>
-import {departEdit, getDepartDetails} from '@/api/table'
+import { departEdit, getDepartDetails } from '@/api/table'
 
 const activityStatusOptions = [
   { key: 'processing', display_name: '进行中' },
@@ -55,7 +61,9 @@ export default {
         title: [{ required: true, message: 'title is required', trigger: 'blur' }]
       },
       temp: {
-        title: ''
+        title: '',
+        account: '',
+        password: ''
       },
       total: 0,
       tableKey: 0,
@@ -83,8 +91,7 @@ export default {
         id: this.$route.params.id
       }).then(response => {
         console.log('depart details info response', response)
-        this.temp.title = response.data.title
-        this.temp.id = response.data.id
+        this.temp = response.data
       })
     },
     departEdit() {

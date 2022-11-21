@@ -34,12 +34,12 @@ export function getUserDetails(params) {
 }
 
 export function userAdd(params) {
-  // console.log('data', data)
+  console.log('userAdd params', params)
   params.token = getToken()
   return request({
     url: '/user/add',
-    method: 'get',
-    params: params
+    method: 'POST',
+    data: params
   })
 }
 
@@ -48,8 +48,8 @@ export function userEdit(params) {
   params.token = getToken()
   return request({
     url: '/user/edit',
-    method: 'get',
-    params: params
+    method: 'post',
+    data: params
   })
 }
 
@@ -59,7 +59,7 @@ export function userDelete(params) {
   return request({
     url: '/user/delete',
     method: 'get',
-    params: params
+    data: params
   })
 }
 
@@ -69,7 +69,7 @@ export function getPermissionList(params) {
   return request({
     url: '/permission/list',
     method: 'get',
-    params: params
+    data: params
   })
 }
 

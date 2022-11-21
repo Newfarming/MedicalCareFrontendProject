@@ -5,7 +5,7 @@
       <el-button style="margin-top:5px;" class="filter-item" type="primary" icon="el-icon-search" @click="fetchData">
         搜索部门
       </el-button>
-      <el-button v-show="permission_type.indexOf('5')>=0" class="filter-item" style="margin-left: 10px;margin-top: 5px;" type="primary" icon="el-icon-edit" @click="handleJumpAdd">
+      <el-button v-show="permission_type.indexOf('1')>=0" class="filter-item" style="margin-left: 10px;margin-top: 5px;" type="primary" icon="el-icon-edit" @click="handleJumpAdd">
         添加部门
       </el-button>
     </div>
@@ -22,24 +22,24 @@
     >
       <el-table-column label="ID"  align="center" width="80" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
-          <span>{{ row.pk }}</span>
+          <span>{{ row.id }}</span>
         </template>
       </el-table-column>
       <el-table-column label="部门名称" min-width="150px">
         <template slot-scope="{row}">
-          <span class="link-type" @click="handleJumpDetails(row)">{{ row.fields.title }}</span>
+          <span class="link-type" @click="handleJumpDetails(row)">{{ row.title }}</span>
           <!--          <el-tag>{{ row.type | typeFilter }}</el-tag>-->
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
-          <el-button v-show="permission_type.indexOf('8')>=0" type="primary" size="mini" @click="handleJumpEdit(row)">
+          <el-button v-show="permission_type.indexOf('1')>=0" type="primary" size="mini" @click="handleJumpEdit(row)">
             编辑
           </el-button>
 <!--          <el-button size="mini" type="success" @click="handleJumpDetails(row)">-->
 <!--            详情-->
 <!--          </el-button>-->
-          <el-button v-show="permission_type.indexOf('6')>=0"  size="mini" type="danger" @click="handleDelete(row,$index)">
+          <el-button v-show="permission_type.indexOf('1')>=0"  size="mini" type="danger" @click="handleDelete(row,$index)">
             删除
           </el-button>
         </template>
@@ -116,14 +116,14 @@ export default {
     },
     handleJumpEdit(row) {
       console.log('row:' + JSON.stringify(row))
-      this.$router.push('/department/department-edit/' + row.pk)
+      this.$router.push('/department/department-edit/' + row.id)
     },
     handleJumpAdd() {
       this.$router.push('/department/department-add')
     },
     handleDelete(row) {
       departDelete({
-        id: row.pk
+        id: row.id
       }).then(response => {
         this.fetchData()
         // this.listLoading = false

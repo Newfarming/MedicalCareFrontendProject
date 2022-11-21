@@ -31,33 +31,28 @@
       </el-table-column>
       <el-table-column label="姓名" min-width="150px">
         <template slot-scope="{row}">
-          <span class="link-type" @click="handleJumpDetails(row)">{{ row.name }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="工号" min-width="150px">
-        <template slot-scope="{row}">
-          <span class="link-type" @click="handleJumpDetails(row)">{{ row.workNo }}</span>
+          <span class="link-type" @click="handleJumpEdit(row)">{{ row.name }}</span>
         </template>
       </el-table-column>
       <el-table-column label="手机号" min-width="150px">
         <template slot-scope="{row}">
-          <span class="link-type" @click="handleJumpDetails(row)">{{ row.phone }}</span>
+          <span class="link-type" @click="handleJumpEdit(row)">{{ row.phone }}</span>
           <!--          <el-tag>{{ row.type | typeFilter }}</el-tag>-->
         </template>
       </el-table-column>
       <el-table-column label="部门" min-width="150px">
         <template slot-scope="{row}">
-          <span class="link-type" @click="handleJumpDetails(row)">{{ row.depart_name }}</span>
+          <span class="link-type" @click="handleJumpEdit(row)">{{ row.depart_name }}</span>
           <!--          <el-tag>{{ row.type | typeFilter }}</el-tag>-->
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
-          <el-button v-show="permission_type.indexOf('4')>=0" type="primary" size="mini" @click="handleJumpEdit(row)">
+<!--          <el-button v-show="permission_type.indexOf('4')>=0" type="primary" size="mini" @click="handleJumpEdit(row)">-->
+<!--            编辑-->
+<!--          </el-button>-->
+          <el-button size="mini" type="primary" @click="handleJumpEdit(row)">
             编辑
-          </el-button>
-          <el-button size="mini" type="success" @click="handleJumpDetails(row)">
-            详情
           </el-button>
           <el-button v-show="permission_type.indexOf('2')>=0" size="mini" type="danger" @click="handleDelete(row,row.id)">
             删除
@@ -78,7 +73,7 @@ import Pagination from '@/components/Pagination' // secondary package based on e
 
 const TypeOptions = [
   { key: '1', display_name: '姓名', value: 'name' },
-  { key: '2', display_name: '工号', value: 'workNo' },
+  // { key: '2', display_name: '工号', value: 'workNo' },
   { key: '3', display_name: '手机号', value: 'phone' }
   // { key: '4', display_name: '部门', value: '' }
 ]
